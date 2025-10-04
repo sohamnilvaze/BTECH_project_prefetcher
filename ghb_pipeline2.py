@@ -1,18 +1,22 @@
 import csv
 
+
+
 def parse_trace_file(filename):
+    i = 0
     entries = []
     with open(filename, 'r') as f:
         timestamp = 0
         for line in f:
             line = line.strip()
             if not line or line.startswith('#'):
+                i = i + 1
                 continue
             parts = line.split()
             if parts[0] == 'I':
                 pc_str = parts[1][2:]  # Remove "Ox"
                 pc = int(pc_str, 16)
-                entries.append({'timestamp': timestamp, 'pc': pc, 'addr': None, 'type': 'I', 'tid': None})
+                entries.append({'timestamp': timestamp, 'pc': pc, 'addr': None, 'type': 'I', 'tid': None, 'pattern' : 2 ** i})
             else:
                 type_ = parts[0]
                 tid = None
@@ -25,7 +29,7 @@ def parse_trace_file(filename):
                         pc = int(p.split('=')[1], 16)
                     elif p.startswith('ea='):
                         addr = int(p.split('=')[1], 16)
-                entries.append({'timestamp': timestamp, 'pc': pc, 'addr': addr, 'type': type_, 'tid': tid})
+                entries.append({'timestamp': timestamp, 'pc': pc, 'addr': addr, 'type': type_, 'tid': tid, 'pattern' : 2 ** i})
             timestamp += 1
     return entries
 
@@ -41,6 +45,7 @@ def generate_features(entries, n):
             'PC': hex(e['pc']) if e['pc'] is not None else None,
             'Type': e['type'],
             'Address': hex(e['addr']),
+            'pattern_type' : e['pattern'],
         }
         # Deltas with previous n R/W
         for i in range(1, n+1):

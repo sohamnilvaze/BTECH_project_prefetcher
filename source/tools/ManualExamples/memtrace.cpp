@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    out.open(KnobOutputFile.Value().c_str());
+    out.open(KnobOutputFile.Value().c_str(), std::ios_base::app);
     if (!out.is_open())
     {
         std::cerr << "Unable to open output file\n";
