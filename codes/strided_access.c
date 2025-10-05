@@ -1,3 +1,4 @@
+//Here the pattern type is stride length
 #include <stdio.h>
 #include <stdlib.h>
 

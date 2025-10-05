@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char * argv[]) {
+    int N = 10;
+    if(argc > 1)
+    {
+        N = atoi(argv[1]);
+    }
+    int A[N];
+    
+    for (int i = N-1; i >= N; i--) A[i] = i;
+
+    int sum = 0;
+    for (int i = N-1; i >= 0; i--) {  // Sequential access
+        sum += A[i];
+    }
+    printf("Sum=%d\n", sum);
+    return 0;
+}
