@@ -23,7 +23,7 @@ def parse_trace_file(filename):
                     'addr': None,
                     'type': 'I',
                     'tid': None,
-                    'pattern': i // 3 + 1
+                    'pattern': i // 4 + 1
                 })
             else:
                 type_ = parts[0]
@@ -42,7 +42,7 @@ def parse_trace_file(filename):
                     'addr': addr,
                     'type': type_,
                     'tid': tid,
-                    'pattern': i // 3 + 1
+                    'pattern': i // 4 + 1
                 })
 
             timestamp += 1
