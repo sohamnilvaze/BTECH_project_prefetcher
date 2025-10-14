@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import scipy
+from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
 
 def plot_delta_histogram(deltas, bins=100, title=None):
     plt.figure(figsize=(6,3))
@@ -108,6 +110,57 @@ def plot_all_plots(df,col):
     #fft_analysis(df,col)
     autocorrelation_plot(df,col)
     read_vs_write(df)
+
+def plot_inter_arrival(df, time_col='Timestamp'):
+    times = df[time_col].sort_values().values
+    inter_arrival = np.diff(times)
+    plt.figure(figsize=(6,3))
+    plt.hist(inter_arrival, bins=50, color='dodgerblue', alpha=0.7)
+    plt.xlabel('Inter-arrival time (steps)')
+    plt.ylabel('Count')
+    plt.title('Histogram of Inter-arrival Times')
+    plt.tight_layout()
+    plt.show()
+
+def plot_inter_arrival_timeseries(df, time_col='Timestamp'):
+    times = df[time_col].sort_values().values
+    inter_arrival = np.diff(times)
+    plt.figure(figsize=(8,2))
+    plt.plot(inter_arrival, marker='.', linestyle='-')
+    plt.xlabel('Access Index')
+    plt.ylabel('Inter-arrival Time')
+    plt.title('Inter-arrival Timeseries')
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_pca_features(feats, label_col='type'):
+    pca = PCA(n_components=2)
+    X = feats.drop(columns=[label_col]).values
+    y = feats[label_col].values
+    X_pca = pca.fit_transform(X)
+    plt.figure(figsize=(7,5))
+    sns.scatterplot(x=X_pca[:,0], y=X_pca[:,1], hue=y, palette='Set2')
+    plt.title('PCA of Per-Window Features')
+    plt.xlabel('PC1')
+    plt.ylabel('PC2')
+    plt.show()
+
+def plot_tsne_features(feats, label_col='type'):
+    X = feats.drop(columns=[label_col]).values
+    y = feats[label_col].values
+    X_tsne = TSNE(n_components=2, random_state=42).fit_transform(X)
+    plt.figure(figsize=(7,5))
+    sns.scatterplot(x=X_tsne[:,0], y=X_tsne[:,1], hue=y, palette='Set2')
+    plt.title('t-SNE of Per-Window Features')
+    plt.xlabel('Dim1')
+    plt.ylabel('Dim2')
+    plt.show()
+
+def plot_feature_pairplot(feats, label_col='type'):
+    sns.pairplot(feats, hue=label_col, diag_kind='kde', plot_kws=dict(alpha=0.5))
+    plt.suptitle('Feature Pairplot', y=1.02)
+    plt.show()
 
 
 

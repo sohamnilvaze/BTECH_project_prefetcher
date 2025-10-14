@@ -1,5 +1,5 @@
 import csv
-
+import argparse
 
 
 def parse_trace_file(filename):
@@ -126,13 +126,18 @@ def write_features_csv(features, output_file):
             writer.writerow(row)
 
 def main():
-    trace_file = input("Enter trace file name (e.g., trace.txt): ").strip()
-    out_csv = input("Enter output CSV file name (e.g., features.csv): ").strip()
-    n = int(input("Enter n (number of previous/next read/write deltas): "))
-    entries = parse_trace_file(trace_file)
-    features = generate_features(entries, n)
-    write_features_csv(features, out_csv)
-    print(f"Features written to {out_csv}")
+    #trace_file = input("Enter trace file name (e.g., trace.txt): ").strip()
+    #out_csv = input("Enter output CSV file name (e.g., features.csv): ").strip()
+    #n = int(input("Enter n (number of previous/next read/write deltas): "))
+    parser = argparse.ArgumentParser(description="Process trace file and generate features CSV.")
+    parser.add_argument('trace_file', help="Input trace file name (e.g., trace.txt)")
+    parser.add_argument('output_csv', help="Output CSV file name (e.g., features.csv)")
+    parser.add_argument('n', type=int, help="Number of previous/next read/write deltas")
+    args = parser.parse_args()
+    entries = parse_trace_file(args.trace_file)
+    features = generate_features(entries, args.n)
+    write_features_csv(features, args.output_csv)
+    print(f"Features written to {args.output_csv}")
 
 if __name__ == "__main__":
     main()

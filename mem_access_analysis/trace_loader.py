@@ -24,4 +24,5 @@ def sanitize_df(df, feature_cols):
         if c not in df.columns:
             df[c] = 0.0
     df[feature_cols] = df[feature_cols].astype(float).fillna(0.0)
-    return df
+    r,c = df.shape
+    return df,r

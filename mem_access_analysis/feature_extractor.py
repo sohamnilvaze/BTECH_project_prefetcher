@@ -92,29 +92,63 @@ def compute_window_features(delta_read, delta_write=None):
 
     return f
 
+# def extract_features_from_df(df, feature_read_cols, feature_write_cols=None,
+#                              window=500, step=250, do_log=False):
+#     rows = []
+#     # prepare a combined vector (choose primary column for temporal order)
+#     # assume df is already filtered to one program/pattern
+#     for start in range(0, max(1, len(df) - window + 1), step):
+#         win = df.iloc[start:start+window]
+#         # choose primary series: Delta_with_1_last_read over time
+#         # if multiple read columns, you could use last_1 only as representative
+#         dr = win[feature_read_cols[0]].values
+#         dw = None
+#         if feature_write_cols:
+#             dw = win[feature_write_cols[0]].values
+#         if do_log:
+#             # log-scale to compress large jumps
+#             dr = np.sign(dr) * np.log1p(np.abs(dr))
+#             if dw is not None:
+#                 dw = np.sign(dw) * np.log1p(np.abs(dw))
+#         f = compute_window_features(dr, dw)
+#         if f is None: continue
+#         f['start'] = start
+#         f['length'] = len(dr)
+#         rows.append(f)
+#     return pd.DataFrame(rows)
+
 def extract_features_from_df(df, feature_read_cols, feature_write_cols=None,
                              window=500, step=250, do_log=False):
     rows = []
-    # prepare a combined vector (choose primary column for temporal order)
-    # assume df is already filtered to one program/pattern
     for start in range(0, max(1, len(df) - window + 1), step):
         win = df.iloc[start:start+window]
-        # choose primary series: Delta_with_1_last_read over time
-        # if multiple read columns, you could use last_1 only as representative
-        dr = win[feature_read_cols[0]].values
-        dw = None
-        if feature_write_cols:
-            dw = win[feature_write_cols[0]].values
-        if do_log:
-            # log-scale to compress large jumps
-            dr = np.sign(dr) * np.log1p(np.abs(dr))
-            if dw is not None:
-                dw = np.sign(dw) * np.log1p(np.abs(dw))
-        f = compute_window_features(dr, dw)
-        if f is None: continue
-        f['start'] = start
-        f['length'] = len(dr)
-        rows.append(f)
-    return pd.DataFrame(rows)
+        f = {}
 
+        # Process all read columns
+        for col in feature_read_cols:
+            dr = win[col].values
+            if do_log:
+                dr = np.sign(dr) * np.log1p(np.abs(dr))
+            feats_r = compute_window_features(dr, None)
+            if feats_r:
+                f.update({f"{col}_{k}": v for k, v in feats_r.items()})
+
+        # Process all write columns
+        if feature_write_cols:
+            for col in feature_write_cols:
+                dw = win[col].values
+                if do_log:
+                    dw = np.sign(dw) * np.log1p(np.abs(dw))
+                feats_w = compute_window_features(dw, None)
+                if feats_w:
+                    f.update({f"{col}_{k}": v for k, v in feats_w.items()})
+
+        if not f:
+            continue
+
+        f['start'] = start
+        f['length'] = window
+        rows.append(f)
+
+    return pd.DataFrame(rows)
 
