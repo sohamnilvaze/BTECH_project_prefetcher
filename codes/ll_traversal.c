@@ -6,10 +6,15 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
-int main() {
+int main(int argc, char*argv[]) {
+    int N = 1;
+    if(argc > 1)
+    {
+        N = atoi(argv[1]);
+    }
     Node* head = NULL;
     Node* prev = NULL;
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < N; i++) {
         Node* node = malloc(sizeof(Node));
         node->val = i;
         node->next = NULL;
