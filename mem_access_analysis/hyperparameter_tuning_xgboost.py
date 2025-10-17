@@ -1,9 +1,11 @@
+import xgboost as xgb
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
 from sklearn.metrics import classification_report, accuracy_score
+from sklearn.preprocessing import LabelEncoder
+
 
 df = pd.read_csv("../mem_access_traces/merged.csv")
 print(df['Target'].value_counts())
@@ -13,7 +15,8 @@ print(df.info())
 df_s = df.sample(frac = 1, random_state = 42).reset_index(drop = True)
 df_s.drop(["start","length"],axis = 1, inplace = True)
 X = df_s.iloc[:,:-1]
-y = df_s["Target"]
+le = LabelEncoder()
+y = le.fit_transform(df_s["Target"])
 
 # ----------------------------
 # 2. Preprocess: scaling
@@ -28,16 +31,17 @@ X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y, test_size=0.2, stratify=y, random_state=42
 )
 
-# ----------------------------
-# 4. Define KNN and parameter grid
-# ----------------------------
-svc = SVC()
+xgc = xgb.XGBClassifier()   
 
 param_grid = {
-    'kernel' : ['poly'],
-    'gamma' : [1e-3, 1e-2, 0.1, 0.3, 0.5, 0.7,0.9],
-    'C' : [0.1, 0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
-}    
+    'n_estimators': [200, 300, 500],
+    'learning_rate': [0.01, 0.05, 0.1],
+    'max_depth': [4, 6, 8, 10],
+    'subsample': [0.7, 0.8, 1.0],
+    'colsample_bytree': [0.7, 0.8, 1.0],
+    'gamma': [0, 0.1, 0.3],
+    'scale_pos_weight': [1, 2, 5]  # useful for imbalance
+}
 
 # ----------------------------
 # 5. Stratified K-Fold to preserve imbalance
@@ -48,7 +52,7 @@ cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 # 6. Grid Search
 # ----------------------------
 grid_search = GridSearchCV(
-    estimator=svc,
+    estimator=xgc,
     param_grid=param_grid,
     scoring='f1_macro',  # or 'f1_macro' if imbalance is strong
     cv=cv,
@@ -73,28 +77,4 @@ y_pred = best_knn.predict(X_test)
 
 print("\nTest Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
-
-'''
-Best accuracy: 0.8971
-C = 0.5, gamma = 0.001, linear
-test accuracy:- 0.8972
-scoring in GridSearch CV used as accuracy.
-'''
-
-'''
-Best accuracy: 0.9409
-C = 0.8, gamma = 0.001, linear
-test accuracy:- 0.8978
-scoring in GridSearch CV used as f1_macro.
-'''
-
-
-'''
-Best accuracy: 0.9509
-C = 0.5, gamma = 0.3, poly
-test accuracy:- 0.8953
-scoring in GridSearch CV used as f1_macro.
-'''
-
-
 

@@ -1,9 +1,10 @@
+from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
 from sklearn.metrics import classification_report, accuracy_score
+
 
 df = pd.read_csv("../mem_access_traces/merged.csv")
 print(df['Target'].value_counts())
@@ -28,16 +29,16 @@ X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y, test_size=0.2, stratify=y, random_state=42
 )
 
-# ----------------------------
-# 4. Define KNN and parameter grid
-# ----------------------------
-svc = SVC()
+rfc = RandomForestClassifier()
 
 param_grid = {
-    'kernel' : ['poly'],
-    'gamma' : [1e-3, 1e-2, 0.1, 0.3, 0.5, 0.7,0.9],
-    'C' : [0.1, 0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
-}    
+    'n_estimators': [100, 200, 300, 500],
+    'max_depth': [200],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4],
+    'max_features': ['sqrt', 'log2'],
+    'class_weight': ['balanced']
+}
 
 # ----------------------------
 # 5. Stratified K-Fold to preserve imbalance
@@ -48,7 +49,7 @@ cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 # 6. Grid Search
 # ----------------------------
 grid_search = GridSearchCV(
-    estimator=svc,
+    estimator=rfc,
     param_grid=param_grid,
     scoring='f1_macro',  # or 'f1_macro' if imbalance is strong
     cv=cv,
@@ -75,26 +76,13 @@ print("\nTest Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
 
 '''
-Best accuracy: 0.8971
-C = 0.5, gamma = 0.001, linear
-test accuracy:- 0.8972
-scoring in GridSearch CV used as accuracy.
+Train accuracy:- 0.9232
+class_weight: balanced, max_depth:None, max_features: log2, min_samples_leaf:4, min_samples_splt:5,n_estimators:100
+test accuracy:- 0.8306
 '''
 
 '''
-Best accuracy: 0.9409
-C = 0.8, gamma = 0.001, linear
-test accuracy:- 0.8978
-scoring in GridSearch CV used as f1_macro.
+Train accuracy:- 0.9239
+class_weight: balanced, max_depth:200, max_features: sqrt, min_samples_leaf:4, min_samples_splt:2,n_estimators:200
+test accuracy:- 0.8301
 '''
-
-
-'''
-Best accuracy: 0.9509
-C = 0.5, gamma = 0.3, poly
-test accuracy:- 0.8953
-scoring in GridSearch CV used as f1_macro.
-'''
-
-
-

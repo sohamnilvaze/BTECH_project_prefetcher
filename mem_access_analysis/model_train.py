@@ -37,3 +37,7 @@ for name, clf in models.items():
     #print(confusion_matrix(y_test, y_pred))
     if name == "Random Forest":
         print("Feature importances:", clf.feature_importances_)
+
+'''
+List of models:- logistic regression, SVC, KNClassifier, RandomForestClassifier, XGBoostClassifier, LightGBM, catboost, Gradient Boosting Classifier, MLP
+'''
