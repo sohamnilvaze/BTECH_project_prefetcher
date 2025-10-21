@@ -21,19 +21,23 @@ y = df_s["Target"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42,train_size=0.8)
 
 # Train
-dt = DecisionTreeClassifier(max_depth=5, random_state=42)
+dt = DecisionTreeClassifier(criterion='gini',splitter='best',max_depth=10, random_state=42,min_samples_split=10, min_samples_leaf=2,max_features='log2',max_leaf_nodes=50,min_impurity_decrease=0.01,class_weight='balanced')
 dt.fit(X_train, y_train)
 
 # Predict
 y_pred = dt.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
 
 # Extract rules
-rules = export_text(dt, feature_names=list(X.columns))
-print("\nExtracted Rules:\n", rules)
+# rules = export_text(dt, feature_names=list(X.columns))
+# print("\nExtracted Rules:\n", rules)
 
 
-plt.figure(figsize=(20,10))
-plot_tree(dt, feature_names=X.columns, class_names=[str(i) for i in sorted(y.unique())], filled=True)
-plt.show()
+# plt.figure(figsize=(20,10))
+# plot_tree(dt, feature_names=X.columns, class_names=[str(i) for i in sorted(y.unique())], filled=True)
+# plt.show()
+
+'''
+getting accuracy of around 88.09%
+'''
