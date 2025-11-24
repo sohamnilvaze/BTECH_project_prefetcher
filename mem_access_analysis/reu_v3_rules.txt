@@ -1,0 +1,19 @@
+|--- Delta_with_1_last_read_fft_dom_power <= 0.10
+|   |--- Delta_with_1_last_read_fft_dom_power <= -0.02
+|   |   |--- Delta_with_1_last_write_fft_dom_power <= -0.13
+|   |   |   |--- Delta_with_3_last_read_fft_dom_power <= -0.55
+|   |   |   |   |--- class: 8
+|   |   |   |--- Delta_with_3_last_read_fft_dom_power >  -0.55
+|   |   |   |   |--- class: 6
+|   |   |--- Delta_with_1_last_write_fft_dom_power >  -0.13
+|   |   |   |--- class: 3
+|   |--- Delta_with_1_last_read_fft_dom_power >  -0.02
+|   |   |--- Delta_with_2_last_write_median <= 0.40
+|   |   |   |--- class: 1
+|   |   |--- Delta_with_2_last_write_median >  0.40
+|   |   |   |--- class: 1
+|--- Delta_with_1_last_read_fft_dom_power >  0.10
+|   |--- Delta_with_3_last_read_fft_dom_power <= 0.39
+|   |   |--- class: 0
+|   |--- Delta_with_3_last_read_fft_dom_power >  0.39
+|   |   |--- class: 0

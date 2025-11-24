@@ -1,0 +1,28 @@
+1) _unique:- Counts how many distinct memory addresses appear in the window. 
+    High value -> randomised access pattern
+    Low value -> indicates reuse/loops/locality
+
+2) _mean:- Average value of the numeric delta/access feature.
+    High -> larger jumps in memory
+    Low -> sequantial small deltas
+
+3) _mode_count:- Counts how large the dominant/repeating pattern is.
+    High -> strong repetetion, reuse/simple loops
+    Low -> randomized memory access
+
+4) _zeros_frac:- Fraction of access that are zero(non-access) can represent invalid accesses, no operation, null pointer reads
+    High -> static pointer patterns, reuse, repeated actions, loops
+    Low-> dynamic random access patterns
+
+5)_std:- Standard deviation of addresses/deltas
+    High -> highly unpredictable, random access, possibly recurcsive with jumps
+    Low -> loops, smooth sequential stepping
+
+6) _fft_dom_power:- periodic patterns in address accesses, dominant frequency represents strongest periodic component
+    High -> Strong periodic memory pattern
+    Low -> no periodicity, random access, recursion, chaotic patterns
+
+7)_entropy:- Shannon entropy of access patterns
+    High -> diverse addresses, irregular recursion
+    Low -> repetetive patterns reuse
+

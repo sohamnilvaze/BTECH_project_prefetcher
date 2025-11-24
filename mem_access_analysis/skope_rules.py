@@ -1,30 +1,21 @@
+from sklearn.datasets import load_iris
 from skrules import SkopeRules
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score, f1_score, confusion_matrix
-import pandas as pd
 
-# Input: feats (features DataFrame), program_labels (list or Series of labels like 'seq', 'random', ...)
-df = pd.read_csv("../mem_access_traces/merged.csv")
-print(df['Target'].value_counts())
-print(df.info())
+dataset = load_iris()
+feature_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+clf = SkopeRules(max_depth_duplication=2,
+                 n_estimators=30,
+                 precision_min=0.3,
+                 recall_min=0.1,
+                 feature_names=feature_names)
 
-
-df_s = df.sample(frac = 1, random_state = 42).reset_index(drop = True)
-df_s.drop(["start","length"],axis = 1, inplace = True)
-X = df_s.iloc[:,:-1]
-y = df_s["Target"]
-
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42,train_size=0.8)
-
-
-sr = SkopeRules(feature_names=X.columns, precision_min=0.5, recall_min=0.1, n_estimators=30, random_state=42)
-sr.fit(X_train, y_train)
-
-y_pred = sr.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
-
-# Extract rules
-rules = sr.rules_
-for r in rules[:10]:
-    print(r)
+for idx, species in enumerate(dataset.target_names):
+    X, y = dataset.data, dataset.target
+    clf.fit(X, y == idx)
+    rules = clf.rules_[0:3]
+    print("Rules for iris", species)
+    for rule in rules:
+        print(rule)
+    print()
+    print(20*'=')
+    print()

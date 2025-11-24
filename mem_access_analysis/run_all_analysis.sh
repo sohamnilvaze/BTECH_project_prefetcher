@@ -4,7 +4,7 @@
 PYTHON_SCRIPT="run_analysis.py"
 
 # Directory containing the .txt files, "." means current directory
-INPUT_DIR="../mem_access_traces"
+INPUT_DIR="../mem_access_traces_basic"
 
 for csvfile in "$INPUT_DIR"/*.csv
 do
