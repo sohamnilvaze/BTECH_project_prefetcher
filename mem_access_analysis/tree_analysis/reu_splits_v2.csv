@@ -1,0 +1,10 @@
+node_id,feature_idx,feature,threshold,left_child,right_child,depth,n_samples
+0,23,Delta_with_1_last_write_std,-0.5312044680537233,1,2,0,144
+1,32,Delta_with_1_last_write_fft_dom_power,-0.5350451082934365,15,16,1,16
+2,35,Delta_with_2_last_write_median,0.370159389659527,3,4,1,128
+3,16,Delta_with_2_last_read_entropy,-0.6395766847142895,11,12,2,57
+11,10,Delta_with_1_last_read_fft_dom_power,1.0474378183191602,17,18,3,20
+12,32,Delta_with_1_last_write_fft_dom_power,-0.16108715362624773,13,14,3,37
+4,38,Delta_with_2_last_write_entropy,0.0670882122228087,5,6,2,71
+6,35,Delta_with_2_last_write_median,0.4022621202721499,7,8,3,27
+7,16,Delta_with_2_last_read_entropy,0.38091820029818324,9,10,4,10

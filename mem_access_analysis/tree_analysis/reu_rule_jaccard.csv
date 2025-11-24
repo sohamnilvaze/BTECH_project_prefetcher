@@ -1,0 +1,11 @@
+v1,v2,jaccard
+version 1,version 1,1.0
+version 1,version 2,0.07547169811320754
+version 1,version 3,0.044444444444444446
+version 1,version 4,0.04081632653061224
+version 2,version 2,1.0
+version 2,version 3,0.023255813953488372
+version 2,version 4,0.043478260869565216
+version 3,version 3,1.0
+version 3,version 4,0.0
+version 4,version 4,1.0

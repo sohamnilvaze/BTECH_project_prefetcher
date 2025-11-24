@@ -1,0 +1,28 @@
+|--- Delta_with_1_last_write_std <= -0.53
+|   |--- Delta_with_1_last_write_fft_dom_power <= -0.54
+|   |   |--- class: 8
+|   |--- Delta_with_1_last_write_fft_dom_power >  -0.54
+|   |   |--- class: 5
+|--- Delta_with_1_last_write_std >  -0.53
+|   |--- Delta_with_2_last_write_median <= 0.37
+|   |   |--- Delta_with_2_last_read_entropy <= -0.64
+|   |   |   |--- Delta_with_1_last_read_fft_dom_power <= 1.05
+|   |   |   |   |--- class: 2
+|   |   |   |--- Delta_with_1_last_read_fft_dom_power >  1.05
+|   |   |   |   |--- class: 4
+|   |   |--- Delta_with_2_last_read_entropy >  -0.64
+|   |   |   |--- Delta_with_1_last_write_fft_dom_power <= -0.16
+|   |   |   |   |--- class: 4
+|   |   |   |--- Delta_with_1_last_write_fft_dom_power >  -0.16
+|   |   |   |   |--- class: 5
+|   |--- Delta_with_2_last_write_median >  0.37
+|   |   |--- Delta_with_2_last_write_entropy <= 0.07
+|   |   |   |--- class: 1
+|   |   |--- Delta_with_2_last_write_entropy >  0.07
+|   |   |   |--- Delta_with_2_last_write_median <= 0.40
+|   |   |   |   |--- Delta_with_2_last_read_entropy <= 0.38
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- Delta_with_2_last_read_entropy >  0.38
+|   |   |   |   |   |--- class: 3
+|   |   |   |--- Delta_with_2_last_write_median >  0.40
+|   |   |   |   |--- class: 0

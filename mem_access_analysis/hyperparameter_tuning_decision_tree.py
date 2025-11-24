@@ -6,7 +6,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, accuracy_score
 
 
-df = pd.read_csv("../mem_access_traces/merged.csv")
+df = pd.read_csv("../mem_access_traces/merged.csv") 
 print(df['Target'].value_counts())
 print(df.info())
 
